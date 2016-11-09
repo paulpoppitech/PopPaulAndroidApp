@@ -12,9 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    Fragment mFragment;
+    private FragmentManager fragmentManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,14 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+
+        mFragment = new FragmentEmail();
+        if (fragmentManager == null) {
+            fragmentManager = getSupportFragmentManager();
+        }
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_main, mFragment)
+                .commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -80,18 +93,20 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.main) {
+            if (!(mFragment instanceof FragmentEmail)) {
+                mFragment = new FragmentEmail();
+            }
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_main, mFragment)
+                    .commit();
+        } else if (id == R.id.car_list) {
+            if (!(mFragment instanceof FragmentCarList)) {
+                mFragment = new FragmentCarList();
+            }
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_main, mFragment)
+                    .commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
